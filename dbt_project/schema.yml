@@ -1,0 +1,155 @@
+version: 2
+
+models:
+
+  - name: aisp
+    description: Cleaned AISP boundaries.
+
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: name
+
+      - name: geometry
+      
+  - name: cisp
+    description: Cleaned CISP boundaries.
+
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: name
+
+      - name: geometry
+
+        
+  - name: risp
+    description: Cleaned RISP boundaries.
+
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: name
+
+      - name: geometry
+
+
+  - name: roubos_furtos_2024
+    description: Robbery and theft incidents.
+
+    columns:
+      - name: rgocronu
+        data_tests:
+          - unique
+          - not_null
+
+      - name: ano
+
+      - name: data
+
+      - name: hora
+
+      - name: delito
+
+      - name: longitude
+
+      - name: latitude
+
+      - name: desc_delito
+
+  
+  - name: ruas_rio
+    description: Streets and road segments in Rio de Janeiro.
+
+    columns:
+      - name: cod_trecho
+        data_tests:
+          - unique
+          - not_null
+
+      - name: nome_completo
+
+      - name: bairro
+
+      - name: geography
+
+
+  - name: areas_operacao_forca
+    description: Municipal Force operational areas.
+
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: geography
+
+
+  - name: ruas_rio_areas_operacao_forca
+    description: Streets and road segments in Rio de Janeiro enriched with Municipal Force operational areas.
+
+    columns:
+      - name: cod_trecho
+        data_tests:
+          - unique
+          - not_null
+
+      - name: nome_completo
+      
+      - name: bairro
+
+      - name: geography
+
+      - name: areas_operacao
+
+
+  - name: areas_operacao_forca_enriched
+    description: Municipal Force operational areas enriched with AISP, CISP, and RISP boundaries as well as camera and digital equipment info.
+
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: geography
+
+      - name: aisp_requests.name
+
+      - name: aisp_requests.request_count
+
+      - name: cisp_requests.name
+
+      - name: cisp_requests.request_count
+
+      - name: risp_names
+
+      - name: cameras.codigo_camera
+
+      - name: cameras.latitude
+
+      - name: cameras.longitude
+
+      - name: cameras.sistema_origem
+
+      - name: cameras.responsavel
+
+      - name: equipamento.codigo_equipamento
+
+      - name: equipamento.latitude
+
+      - name: equipamento.longitude
+
+      - name: equipamento.local
+
+      - name: equipamento.origem_equipamento
