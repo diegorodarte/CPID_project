@@ -1,0 +1,101 @@
+version: 2
+
+sources:
+
+  - name: external_data
+    description: External CSV data sources for crime and geographic information.
+    
+    tables:
+
+        - name: aisp
+          description: Cleaned AISP boundaries.
+
+          columns:
+            - name: id
+              data_tests:
+                - unique
+                - not_null
+
+            - name: name
+
+            - name: geometry
+      
+
+        - name: cisp
+          description: Cleaned CISP boundaries.
+
+          columns:
+            - name: id
+              data_tests:
+                - unique
+                - not_null
+
+            - name: name
+
+            - name: geometry
+  
+        
+        - name: risp
+          description: Cleaned RISP boundaries.
+
+          columns:
+            - name: id
+              data_tests:
+                - unique
+                - not_null
+
+            - name: name
+
+            - name: geometry
+    
+
+        - name: roubos_furtos_2024
+          description: Robbery and theft incidents.
+
+          columns:
+            - name: rgocronu
+              data_tests:
+                - unique
+                - not_null
+
+            - name: ano
+
+            - name: data
+
+            - name: hora
+
+            - name: delito
+
+            - name: longitude
+
+            - name: latitude
+
+            - name: desc_delito
+
+  
+        - name: ruas_rio
+          description: Streets and road segments in Rio de Janeiro.
+
+          columns:
+            - name: cod_trecho
+              data_tests:
+                - unique
+                - not_null
+
+            - name: nome_completo
+
+            - name: bairro
+
+            - name: geography
+
+
+        - name: areas_operacao_forca
+          description: Municipal Force operational areas.
+
+          columns:
+            - name: id
+              data_tests:
+                - unique
+                - not_null
+
+            - name: geography
