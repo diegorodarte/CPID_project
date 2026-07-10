@@ -1,0 +1,69 @@
+# fogo_cruzado
+
+Primary key:
+id_ocorrencia
+
+Columns:
+- id_ocorrencia - Identificador único para cada ocorrência no banco de dados.
+- numero_ocorrencia - Este campo representa o número único atribuído a cada ocorrência.
+- endereco - Este campo contém o endereço onde a ocorrência ocorreu.
+- estado - Este campo representa o estado onde a ocorrência ocorreu.
+- regiao - O campo 'regiao' representa a região onde a ocorrência ocorreu.
+- cidade - O campo 'cidade' representa o nome da cidade onde a ocorrência ocorreu.
+- bairro - O campo 'bairro' representa o bairro onde a ocorrência ocorreu.
+- subbairro - Representa o sub-bairro onde a ocorrência ocorreu.
+- localidade - O campo 'localidade' representa a localidade específica onde a ocorrência ocorreu. Este é um campo do tipo string que pode incluir informações sobre o nome de um local específico, como favelas, morros, complexos ou áreas dentro da cidade ou região.
+- latitude - Este campo representa a latitude do local onde a ocorrência ocorreu.
+- longitude - Este campo representa a longitude do local onde a ocorrência ocorreu.
+- data_ocorrencia - Este campo representa a data e hora em que a ocorrência ocorreu. O tipo de dados é datetime e o fuso horário é setado para 'America/Sao_Paulo'.
+- acao_policial - Indica se houve ação policial durante a ocorrência.
+- presenca_agente_seguranca - Indica se havia agentes de segurança presentes durante a ocorrência, dentro ou fora de serviço.
+- ocorrencia_relacionada - Este campo contém o número da ocorrência relacionada, caso haja.
+- motivo_principal - Este campo representa o motivo principal da ocorrência.
+- motivos_complementares - Este campo contém um array de motivos complementares relacionados à ocorrência. Esses motivos são suplementares ao motivo principal da ocorrência.
+- categorias - Este campo contém um array de categorias relacionadas à ocorrência. Cada categoria é representada por um valor de string. As categorias fornecem contexto adicional e classificação para cada ocorrência
+- massacre - Este campo representa se a ocorrência foi classificada como um massacre.
+- unidade_policial - Este campo contém o nome da unidade policial envolvida na ocorrência.
+- transportes - Array de dados estruturados relacionados ao transporte afetado pela ocorrência.
+    - tipo_transporte - Tipo de transporte afetado pela ocorrência. (Trem, Metrô, BRT, etc)
+    - interrupcao_transporte - Indica se o transporte foi interrompido devido à ocorrência
+    - data_interrupcao_transporte - Data e hora em que o transporte foi interrompido
+    - data_retomada_transporte - Data e hora em que o transporte foi retomado
+    - descricao_interrupcao_transportes - Descrição adicional sobre como a ocorrência afetou o transporte
+- vitimas - Este campo é um registro do tipo e contém informações sobre as vítimas envolvidas na ocorrência.
+    - id_vitima - Identificador único da vítima
+    - situacao_vitima - Situação da vítima (por exemplo, morta, ferida)
+    - circunstancias_vitima - Array de circunstâncias que levaram ao estado da vítima
+        - descricao_circunstancia - Descrição da circunstância. (Chacina, Bala perdida, Suicídio, etc.)
+        - tipo_circunstancia - N/A
+    - data_morte_vitima - Data e hora da morte da vítima, se aplicável
+    - idade_vitima - Idade da vítima
+    - faixa_etaria_vitima - Grupo de idade ao qual a vítima pertence
+    - genero_vitima - Gênero da vítima
+    - raca_vitima - Raça da vítima
+    - local_ocorrencia - Lugar onde a vítima foi encontrada ou afetada
+    - status_servico - Status de serviço da vítima, se aplicável. (De folga, Em serviço, Não se aplica ou Não identificado.)
+    - tipo_servico - N/A
+    - qualificacoes_vitima - Array com qualificações ou características relevantes da vítima
+        - qualificacoe_vitima - Descrição da qualificação profissional da vítima (Motorista de aplicativo, PPTE, Entregador / Motoboy, Político, etc.)
+        - tipo_qualificacoe_vitima - N/A
+    - posicao_politica_vitima - Cargo político da vítima, se aplicável
+    - tipo_posicao_politica_vitima - N/A
+    - status_politico_vitima - Status do cargo político da vítima, se aplicável
+    - tipo_status_politico_vitima - N/A
+    - partido_politico_vitima - Partido político ao qual a vítima pertence, se aplicável
+    - corporacao_vitima - Corporação à qual a vítima pertence, se aplicável
+    - patente_vitima - Cargo de agente de segurança ocupado pela vítima, se aplicável
+    - tipo_patente_vitima - N/A
+    - status_agente_vitima - Status de serviço da vítima, se aplicável
+    - unidade_policial_vitima - Unidade à qual a vítima pertence, se aplicável
+- vitimas_animais - Este campo é um registro do tipo e contém dados agregados sobre as vítimas animais envolvidas na ocorrência.
+    - nome_animal - Nome do animal, se conhecido
+    - tipo_animal - Tipo de animal (por exemplo, Cachorro, Gato, Papagaio etc.)
+    - situacao_animal - Situação da vítima animal (por exemplo, morta, ferida)
+    - circunstancias_animal - Array de circunstâncias que levaram ao estado da vítima animal
+        - descricao_circunstancia - Descrição da circunstância
+        - tipo_circunstancia - N/A
+    - data_morte_animal - Data e hora da morte do animal, se aplicável
+- timestamp_insercao - Este campo representa a data e hora quando o registro foi inserido no banco de dados. É um campo do tipo datetime e o fuso horário é setado para 'America/Sao_Paulo'.
+- timestamp_update - Este campo representa a data e hora quando o registro foi atualizado no banco de dados. É um campo do tipo datetime e o fuso horário é setado para 'America/Sao_Paulo'.

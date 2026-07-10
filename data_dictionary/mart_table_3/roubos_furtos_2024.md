@@ -1,8 +1,5 @@
 # roubos_furtos_2024
 
-Description:
-2024 robbery and theft incidents.
-
 Primary key:
 rgocronu
 
