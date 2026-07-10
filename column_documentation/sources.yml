@@ -1,0 +1,46 @@
+version: 2
+
+sources:
+
+  - name: csv_external_data
+    tables:
+        - name: aisp
+          columns:
+            - name: id
+            - name: name
+            - name: geometry
+    
+        - name: cisp
+          columns:
+            - name: id
+            - name: name
+            - name: geometry
+          
+        - name: risp
+          columns:
+            - name: id
+            - name: name
+            - name: geometry
+    
+        - name: roubos_furtos_2024
+          columns:
+            - name: rgocronu
+            - name: ano
+            - name: data
+            - name: hora
+            - name: delito
+            - name: longitude
+            - name: latitude
+            - name: desc_delito
+
+        - name: ruas_rio
+          columns:
+            - name: cod_trecho
+            - name: nome_completo
+            - name: bairro
+            - name: geography
+
+        - name: areas_operacao_forca
+          columns:
+            - name: id
+            - name: geography

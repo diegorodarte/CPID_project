@@ -1,0 +1,125 @@
+version: 2
+
+models:
+
+  - name: aisp
+    description: Cleaned AISP boundaries.
+    columns:
+      - name: id
+        description: Unique identifier for the AISP.
+      - name: name
+        description: Name of the AISP.
+      - name: geometry
+        description: Geospatial polygon of the AISP boundaries.
+      
+  - name: cisp
+    description: Cleaned CISP boundaries.
+    columns:
+      - name: id
+        description: Unique identifier for the CISP.
+      - name: name
+        description: Name of the CISP.
+      - name: geometry
+        description: Geospatial polygon of the CISP boundaries.
+        
+  - name: risp
+    description: Cleaned RISP boundaries.
+    columns:
+      - name: id
+        description: Unique identifier for the RISP.
+      - name: name
+        description: Name of the RISP.
+      - name: geometry
+        description: Geospatial polygon of the RISP boundaries.
+
+  - name: roubos_furtos_2024
+    description: Robbery and theft incidents.
+    columns:
+      - name: rgocronu 
+        description: Unique identifier for the incident.
+      - name: ano
+        description: Year of the incident.
+      - name: data
+        description: Date of the incident.
+      - name: hora
+        description: Time of the incident.
+      - name: delito
+        description: Code of the crime committed.
+      - name: longitude
+        description: Longitude of the incident location.
+      - name: latitude
+        description: Latitude of the incident location.
+      - name: desc_delito
+        description: Description of the crime committed.
+
+  - name: ruas_rio
+    description: Streets and road segments throughout Rio de Janeiro.
+    columns:
+      - name: cod_trecho
+        description: Unique identifier for the street or road segment.
+      - name: nome_completo
+        description: Full name of the street or road segment.
+      - name: bairro
+        description: Neighborhood where the street or road segment is located.
+      - name: geography
+        description: Linestring geospatial representation of the street or road segment.
+
+  - name: areas_operacao_forca
+    description: Municipal Force operational areas.
+    columns:
+      - name: id
+        description: Unique identifier for the Municipal Force operational area.
+      - name: geography
+        description: Geospatial polygon of the Municipal Force operational area.
+
+  - name: ruas_rio_areas_operacao_forca
+    description: Streets and road segments in Rio de Janeiro enriched with Municipal Force operational areas.
+    columns:
+      - name: cod_trecho
+        description: Unique identifier for the street or road segment.
+      - name: nome_completo
+        description: Full name of the street or road segment.
+      - name: bairro
+        description: Neighborhood where the street or road segment is located.
+      - name: geography
+        description: Linestring geospatial representation of the street or road segment.
+      - name: areas_operacao
+        description: List of Municipal Force operational areas that intersect with the street or road segment.
+
+  - name: areas_operacao_forca_enriched
+    description: Municipal Force operational areas enriched with AISP, CISP, and RISP boundaries as well as camera and digital equipment info.
+    columns:
+      - name: id
+        description: Unique identifier for the operational area.
+      - name: geography
+        description: Geospatial polygon of the operational area.
+      - name: aisp_requests.name
+        description: Name of the AISP that intersects with the operational area.
+      - name: aisp_requests.request_count
+        description: Number of requests that CIVITAS received associated with the AISP.
+      - name: cisp_requests.name
+        description: Name of the CISP that intersects with the operational area.
+      - name: cisp_requests.request_count
+        description: Number of requests that CIVITAS received associated with the CISP.
+      - name: risp_names
+        description: Name of the RISP that intersect with the operational area.
+      - name: cameras.codigo_camera
+        description: Unique identifier for the camera associated with the operational area.
+      - name: cameras.latitude
+        description: Latitude of the camera associated with the operational area.
+      - name: cameras.longitude
+        description: Longitude of the camera associated with the operational area.
+      - name: cameras.sistema_origem
+        description: Origin system of the camera associated with the operational area.
+      - name: cameras.responsavel
+        description: Responsible entity for the camera associated with the operational area.
+      - name: equipamento.codigo_equipamento
+        description: Unique identifier for the digital equipment associated with the operational area.
+      - name: equipamento.latitude
+        description: Latitude of the digital equipment associated with the operational area.
+      - name: equipamento.longitude
+        description: Longitude of the digital equipment associated with the operational area.
+      - name: equipamento.local
+        description: Name of the street where the digital equipment associated with the operational area is located.
+      - name: equipamento.origem_equipamento
+        description: Origin system of the digital equipment associated with the operational area.

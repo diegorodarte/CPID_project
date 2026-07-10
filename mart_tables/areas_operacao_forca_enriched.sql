@@ -123,6 +123,7 @@ cam_info AS (
     AND cm.camera_interna = FALSE
 
     GROUP BY op.id
+
 ),
 
 
