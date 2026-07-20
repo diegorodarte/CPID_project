@@ -49,4 +49,3 @@ Columns:
     - outras_caracteristicas - Outras características do envolvido.
 - status_denuncia - Status atual da denúncia.
 - timestamp_insercao - Timestamp da inserção do registro no banco de dados.
-

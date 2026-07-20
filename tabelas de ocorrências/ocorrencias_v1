@@ -1,0 +1,208 @@
+CREATE TABLE rj-civitas-dev.cpid_2026_06__diego.ocorrencias_v1 AS
+
+WITH ocorrencias AS (
+
+-- Palver
+
+SELECT
+
+CONCAT('palver_', CAST(id AS STRING)) AS id_ocorrencia,
+'Palver' AS fonte,
+datetime AS data_hora_ocorrencia,
+latitude AS latitude,
+longitude AS longitude,
+main_location_city AS municipio,
+main_location_neighborhood AS bairro,
+main_location_street AS logradouro,
+main_location_full_address AS endereco,
+tags AS categoria_fonte, 
+NULL AS categoria_normalizada,
+text AS descricao, 
+CAST(NULL AS ARRAY<STRUCT
+  <id_pessoa STRING, nome STRING, idade INT64, sexo STRING, raca STRING, situacao STRING, papel STRING >>
+) AS pessoas_envolvidas
+
+FROM rj-civitas.palver.palver_messages
+WHERE main_location_city = 'Rio de Janeiro' AND is_relevant = true
+UNION ALL
+
+
+-- Disque Denúncia
+
+SELECT
+
+CONCAT('disque_denuncia_', CAST(id_denuncia AS STRING)) AS id_ocorrencia,
+'Disque Denúncia' AS fonte,
+TIMESTAMP(data_denuncia, "America/Sao_Paulo") AS data_hora_ocorrencia,
+latitude AS latitude,
+longitude AS longitude,
+'Rio de Janeiro' AS municipio,
+
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+  INITCAP(LOWER(bairro_logradouro)),
+  ' Da ', ' da '),
+  ' De ', ' de '),
+  ' Do ', ' do '),
+  ' Dos ', ' dos '),
+  ' Das ', ' das ')
+  AS bairro,
+
+-- logradouro (Disque Denúnica)
+
+CONCAT(COALESCE(
+  CASE
+    WHEN UPPER(TRIM(tipo_logradouro)) IN ('N.I.', 'NI', 'N.I') THEN NULL
+    WHEN UPPER(tipo_logradouro) = 'R'   THEN 'Rua'
+    WHEN UPPER(tipo_logradouro) = 'AV'  THEN 'Avenida'
+    WHEN UPPER(tipo_logradouro) = 'PC'  THEN 'Praça'
+    WHEN UPPER(tipo_logradouro) = 'PCA' THEN 'Praça'
+    ELSE INITCAP(LOWER(tipo_logradouro))
+    END,
+    ''
+    ),
+
+  CASE
+    WHEN tipo_logradouro IS NOT NULL
+    AND UPPER(TRIM(tipo_logradouro)) NOT IN ('N.I.') THEN ' '
+    ELSE ''
+    END,
+
+COALESCE(
+  CASE
+    WHEN UPPER(TRIM(logradouro)) IN ('NÃO INFORMADO','N.I','NI') THEN NULL
+    ELSE INITCAP(LOWER(logradouro))
+    END,'')) AS logradouro,
+
+-- endereço (Disque Denúncia)
+
+ARRAY_TO_STRING(ARRAY(SELECT part FROM UNNEST([ARRAY_TO_STRING(
+  ARRAY(SELECT p FROM UNNEST([CONCAT
+  (COALESCE(CASE
+    WHEN REPLACE(UPPER(TRIM(tipo_logradouro)), '.', '') IN ('N.I.','NI','N.I')
+    THEN NULL
+    WHEN UPPER(tipo_logradouro) = 'R' THEN 'Rua'
+    WHEN UPPER(tipo_logradouro) = 'AV' THEN 'Avenida'
+    WHEN UPPER(tipo_logradouro) = 'PC' THEN 'Praça'
+    WHEN UPPER(tipo_logradouro) = 'EST'THEN 'Estrada'
+    ELSE INITCAP(LOWER(tipo_logradouro))
+    END,''), ' ',
+  COALESCE(CASE
+    WHEN UPPER(TRIM(logradouro)) IN ('NÃO INFORMADO', 'N.I', 'NI') THEN NULL
+    ELSE INITCAP(LOWER(logradouro))
+    END,'')),
+    NULLIF(TRIM(CAST(numero_logradouro AS STRING)), ''),
+    NULLIF(TRIM(complemento_logradouro), '')]) AS p
+    WHERE p IS NOT NULL AND TRIM(p) != ''),', '),
+  CASE
+    WHEN REPLACE(UPPER(TRIM(bairro_logradouro)), '.', '') IN ('NI','NAO INFORMADO','NAO INFORMACAO') THEN NULL
+    ELSE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(INITCAP(LOWER(bairro_logradouro)),
+    ' Da ', ' da '), ' De ', ' de '),' Do ', ' do '),' Dos ', ' dos '),' Das ', ' das ')
+    END,
+  'Rio de Janeiro - RJ',
+  CASE
+    WHEN cep_logradouro IS NOT NULL
+    AND CAST(cep_logradouro AS STRING) != '0'
+    THEN CONCAT(SUBSTR(LPAD(CAST(cep_logradouro AS STRING), 8, '0'), 1, 5), '-',
+      SUBSTR(LPAD(CAST(cep_logradouro AS STRING), 8, '0'), 6, 3))
+    END]) AS part
+    WHERE part IS NOT NULL AND TRIM(part) != ''
+    ),', ') AS endereco,
+
+ARRAY(
+  SELECT DISTINCT tipo.tipo
+  FROM UNNEST(assuntos) AS assunto
+  CROSS JOIN UNNEST(assunto.tipos) AS tipo
+) AS categoria_fonte,
+
+NULL AS categoria_normalizada,
+relato AS descricao,
+
+ARRAY(
+  SELECT AS STRUCT
+    e.id AS id_pessoa,
+    e.nome AS nome,
+    e.idade AS idade,
+    e.sexo AS sexo,
+    CAST(NULL AS STRING) AS raca,
+    CAST(NULL AS STRING) AS situacao,
+    CAST(NULL AS STRING) AS papel
+    FROM UNNEST(envolvidos) AS e
+) AS pessoas_envolvidas
+
+FROM rj-civitas.disque_denuncia.denuncias
+WHERE UPPER(municipio) = 'RIO DE JANEIRO'
+UNION ALL
+
+
+-- Fogo Cruzado
+
+SELECT
+
+CONCAT('fogo_cruzado_', CAST(id_ocorrencia AS STRING)) AS id_ocorrencia,
+'Fogo Cruzado' AS fonte,
+TIMESTAMP(data_ocorrencia, "America/Sao_Paulo") AS data_hora_ocorrencia,
+latitude AS latitude,
+longitude AS longitude,
+'Rio de Janeiro' AS municipio, 
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(INITCAP(LOWER(bairro)),
+  ' Da ', ' da '),' De ', ' de '),' Do ', ' do '),' Dos ', ' dos '),' Das ', ' das ') AS bairro,
+NULL AS logradouro,
+endereco AS endereco,
+ARRAY_CONCAT(motivos_complementares, categorias) AS categoria_fonte,
+NULL AS categoria_normalizada,
+NULL AS descricao,
+
+ARRAY(SELECT AS STRUCT
+  v.id_vitima AS id_pessoa,
+  CAST(NULL AS STRING) AS nome,
+  v.idade_vitima AS idade,
+  v.genero_vitima AS sexo,
+  v.raca_vitima AS raca,
+  v.situacao_vitima AS situacao,
+  'vitima' AS papel
+  FROM UNNEST(vitimas) AS v
+) AS pessoas_envolvidas
+
+FROM rj-civitas.fogo_cruzado.ocorrencias
+WHERE upper(cidade) = 'RIO DE JANEIRO'
+
+)
+
+# ocorrencias_v2 
+
+SELECT
+
+o.id_ocorrencia,
+o.fonte,
+o.data_hora_ocorrencia,
+o.latitude,
+o.longitude,
+o.municipio,
+o.bairro,
+o.logradouro,
+o.endereco,
+ANY_VALUE(o.pessoas_envolvidas) AS pessoas_envolvidas,
+ARRAY_AGG(DISTINCT m.cat_padronizada IGNORE NULLS) AS categoria_normalizada,
+o.categoria_fonte,
+o.descricao
+
+FROM ocorrencias o
+
+LEFT JOIN UNNEST(o.categoria_fonte) AS categoria
+LEFT JOIN `rj-civitas-dev.cpid_2026_06__diego.mapa_categorias_ocorrencias` m
+
+ON LOWER(TRIM(m.fonte_)) = LOWER(TRIM(o.fonte))
+AND LOWER(TRIM(m.cat_original)) = LOWER(TRIM(categoria))
+
+GROUP BY
+o.id_ocorrencia,
+o.fonte,
+o.data_hora_ocorrencia,
+o.latitude,
+o.longitude,
+o.municipio,
+o.bairro,
+o.logradouro,
+o.endereco,
+o.categoria_fonte,
+o.descricao
